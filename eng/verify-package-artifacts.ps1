@@ -101,6 +101,26 @@ foreach ($packageId in $expectedPackages.Keys) {
             throw "Unexpected dependency '$dependencyId' version '$dependencyVersion' in '$packagePath'."
         }
     }
+
+    if ($packageId -eq "RunicAssets") {
+        $archive = [System.IO.Compression.ZipFile]::OpenRead($packagePath)
+        try {
+            $entryNames = @($archive.Entries | ForEach-Object { $_.FullName })
+            $requiredEntries = @(
+                "buildTransitive/RunicAssets.targets",
+                "tools/net10.0/RunicAssets.Packer.dll",
+                "tools/net10.0/RunicAssets.Packer.deps.json",
+                "tools/net10.0/RunicAssets.Packer.runtimeconfig.json"
+            )
+
+            foreach ($entryName in $requiredEntries) {
+                if ($entryNames -notcontains $entryName) {
+                    throw "Package '$packagePath' is missing required build asset '$entryName'."
+                }
+            }
+        }
+        finally { $archive.Dispose() }
+    }
 }
 
 Write-Host "Verified $($expectedPackages.Count) Runic Assets package artifacts for $PackageVersion."

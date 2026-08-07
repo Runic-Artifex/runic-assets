@@ -1,9 +1,7 @@
 using System;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using CsWebUi;
 
 namespace RunicAssets.CsWebUi;
@@ -63,68 +61,6 @@ public static class CsWebUiAssetExtensions
         window.SetFileHandler(
             source.ToWebUiFileHandler(options),
             new WebUiFileHandlerOptions { MaxResponseBytes = options.MaxResponseBytes });
-    }
-
-    /// <summary>Preloads one source into a legacy CsWebUi virtual file system.</summary>
-    /// <remarks>
-    /// This compatibility API materializes a ZIP and loses Runic Assets response metadata. New code
-    /// should attach the direct handler with <see cref="SetRunicAssets"/>. It is retained for the
-    /// 0.x package line and is planned for removal in the next major version.
-    /// </remarks>
-    [Obsolete("Use SetRunicAssets or ToWebUiFileHandler. This ZIP/VFS compatibility API will be removed in the next major version.")]
-    public static async ValueTask<WebUiVirtualFileSystem> ToWebUiVirtualFileSystemAsync(
-        this IAssetSource source,
-        WebUiVirtualFileSystemOptions? options = null,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(source);
-        await source.ValidateAsync(cancellationToken).ConfigureAwait(false);
-
-        using var buffer = new MemoryStream();
-        using (var archive = new ZipArchive(buffer, ZipArchiveMode.Create, leaveOpen: true))
-        {
-            foreach (AssetDescriptor descriptor in source.Manifest.Assets)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                ZipArchiveEntry entry = archive.CreateEntry(descriptor.RelativePath, CompressionLevel.NoCompression);
-                await using Stream output = entry.Open();
-                await using Stream input = await source
-                    .OpenReadAsync(descriptor.RelativePath, cancellationToken)
-                    .ConfigureAwait(false);
-                await input.CopyToAsync(output, cancellationToken).ConfigureAwait(false);
-            }
-        }
-
-        buffer.Position = 0;
-        options ??= new WebUiVirtualFileSystemOptions
-        {
-            IndexFile = source.Manifest.EntryPoint.RelativePath,
-        };
-        return WebUiVirtualFileSystem.FromArchive(buffer, options);
-    }
-
-    /// <summary>Attaches assets directly while preserving the former asynchronous call shape.</summary>
-    /// <remarks>
-    /// This compatibility overload no longer builds a ZIP or virtual file system. The legacy options'
-    /// SPA fallback setting is preserved; its index file is superseded by the manifest entry point.
-    /// It is retained for the 0.x package line and is planned for removal in the next major version.
-    /// </remarks>
-    [Obsolete("Use the synchronous SetRunicAssets overload. This compatibility overload will be removed in the next major version.")]
-    public static ValueTask SetRunicAssetsAsync(
-        this WebUiWindow window,
-        IAssetSource source,
-        WebUiVirtualFileSystemOptions? options = null,
-        CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        window.SetRunicAssets(
-            source,
-            new RunicAssetsCsWebUiOptions
-            {
-                EnableSinglePageApplicationFallback =
-                    options?.EnableSinglePageApplicationFallback ?? false,
-            });
-        return ValueTask.CompletedTask;
     }
 
     private static WebUiFileHandlerResult HandleRequest(

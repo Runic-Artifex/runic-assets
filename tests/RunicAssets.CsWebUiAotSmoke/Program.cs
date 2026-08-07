@@ -4,9 +4,20 @@ using System.Text;
 using RunicAssets;
 using RunicAssets.CsWebUi;
 
-var source = new EmbeddedAssetSource(
+var source = AssetArchive.ReadEmbedded(
     Assembly.GetExecutingAssembly(),
-    [new("index.html", "RunicAssets.CsWebUiAotSmoke.index.html", IsEntryPoint: true)]);
+    "RunicAssets.CsWebUiAotSmoke.Assets");
+if (source.Manifest.Assets.Count != 2
+    || !StringComparer.Ordinal.Equals(source.Manifest.EntryPoint.RelativePath, "app.html")
+    || !source.Manifest.TryGetAsset("assets/app-A1B2C3D4.js", out AssetDescriptor? script)
+    || script is null
+    || script.MediaType != "text/javascript"
+    || script.CacheMode != AssetCacheMode.Immutable
+    || source.Manifest.TryGetAsset("excluded.txt", out _))
+{
+    return 1;
+}
+
 global::CsWebUi.WebUiFileHandlerResult result = source.ToWebUiFileHandler()("/");
 string response = Encoding.UTF8.GetString(result.Response.Span);
 return result.IsHandled

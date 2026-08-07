@@ -11,6 +11,30 @@ window.SetRunicAssets(assets);
 window.Show(assets.Manifest.EntryPoint.RelativePath);
 ```
 
+For a Vite application, the `RunicAssets` package supplies the complete build
+and runtime path:
+
+```xml
+<PropertyGroup>
+  <RunicAssetsDist>..\Client.Web\dist</RunicAssetsDist>
+</PropertyGroup>
+```
+
+```csharp
+using System.Reflection;
+using RunicAssets;
+using RunicAssets.CsWebUi;
+
+var assets = AssetArchive.ReadEmbedded(Assembly.GetExecutingAssembly());
+window.SetRunicAssets(assets);
+window.Show(assets.Manifest.EntryPoint.RelativePath);
+```
+
+The incremental build target creates the canonical Runic Assets archive,
+including media type, digest, cache policy, ETag, entry-point, and length
+metadata. The archive stays embedded in single-file and NativeAOT applications
+and is read without extraction.
+
 The adapter resolves the source's current manifest for every request, performs
 exact ordinal path lookup, and reads content directly from `IAssetSource`. `/`
 maps to the current manifest entry point. Responses preserve `MediaType`,
@@ -51,8 +75,3 @@ authentication layer.
 CsWebUi owns callback retention, native buffer ownership, exception containment,
 replacement, and disposal. The window retains the handler—and therefore the
 asset source—until another handler replaces it or the window is disposed.
-
-`ToWebUiVirtualFileSystemAsync` remains as an obsolete 0.x compatibility shim.
-It still materializes a ZIP and loses response metadata, and is planned for
-removal in the next major version. The compatibility `SetRunicAssetsAsync`
-shape now uses the direct handler and creates no ZIP or virtual file system.

@@ -5,11 +5,17 @@
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
     <IsPackable>false</IsPackable>
+    <RunicAssetsDist>$(MSBuildProjectDirectory)/vite-dist</RunicAssetsDist>
+    <RunicAssetsEntryPoint>app.html</RunicAssetsEntryPoint>
+    <RunicAssetsDistExclude>runic-assets.zip;excluded.txt</RunicAssetsDistExclude>
+    <RunicAssetsEmbeddedResourceName>RunicAssets.CsWebUiAotSmoke.Assets</RunicAssetsEmbeddedResourceName>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="../../src/RunicAssets/RunicAssets.csproj" />
     <ProjectReference Include="../../src/RunicAssets.CsWebUi/RunicAssets.CsWebUi.csproj" />
-    <EmbeddedResource Include="index.html" LogicalName="RunicAssets.CsWebUiAotSmoke.index.html" />
   </ItemGroup>
+
+  <!-- NuGet consumers receive this import automatically from buildTransitive. -->
+  <Import Project="../../src/RunicAssets/buildTransitive/RunicAssets.targets" />
 </Project>

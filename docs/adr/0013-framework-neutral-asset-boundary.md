@@ -51,6 +51,11 @@ system or ask CsWebUi to infer media and cache policy. This preserves live
 development refresh and keeps native callback and buffer-lifetime mechanics
 inside CsWebUi.
 
+Runic Assets also owns the incremental `dist` packer and embedded archive build
+target. The target emits the canonical metadata-bearing Runic Assets archive;
+CsWebUi does not ship an overlapping Vite packer, virtual filesystem, or asset
+policy layer.
+
 ## Consequences
 
 - Asset packages can be embedded in application assemblies and read directly

@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/RunicAssets.Packer/RunicAssets.Packer.csproj" />
     <Project Path="src/RunicAssets/RunicAssets.csproj" />
     <Project Path="src/RunicAssets.AspNetCore/RunicAssets.AspNetCore.csproj" />
     <Project Path="src/RunicAssets.CsWebUi/RunicAssets.CsWebUi.csproj" />

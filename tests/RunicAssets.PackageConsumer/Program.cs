@@ -6,9 +6,7 @@ using RunicAssets;
 using RunicAssets.CsWebUi;
 using RunicAssets.RunicToolkit;
 
-var source = new EmbeddedAssetSource(
-    Assembly.GetExecutingAssembly(),
-    [new("index.html", "PackageConsumer.index.html", IsEntryPoint: true)]);
+var source = AssetArchive.ReadEmbedded(Assembly.GetExecutingAssembly());
 
 await source.ValidateAsync();
 global::CsWebUi.WebUiFileHandlerResult webUiResponse = source.ToWebUiFileHandler()("/");
