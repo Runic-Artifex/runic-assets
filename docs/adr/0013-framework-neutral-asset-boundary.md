@@ -44,6 +44,13 @@ WebUIToolkit package dependency.
 Host-specific adapters depend on `RunicAssets`; the core package never depends
 on CsWebUi, ASP.NET Core, Runic Toolkit, or another UI framework.
 
+The CsWebUi adapter uses CsWebUi's public, policy-free custom file-handler API.
+It constructs complete HTTP responses directly from the current Runic Assets
+manifest and source; it does not project assets through CsWebUi's virtual file
+system or ask CsWebUi to infer media and cache policy. This preserves live
+development refresh and keeps native callback and buffer-lifetime mechanics
+inside CsWebUi.
+
 ## Consequences
 
 - Asset packages can be embedded in application assemblies and read directly

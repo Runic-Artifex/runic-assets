@@ -11,7 +11,7 @@ $repositoryUrl = "https://github.com/Runic-Artifex/runic-assets"
 $expectedPackages = [ordered]@{
     "RunicAssets" = @{}
     "RunicAssets.CsWebUi" = @{
-        "CsWebUi" = "2.5.0-beta.4.3"
+        "CsWebUi" = "2.5.0-beta.4.4"
         "RunicAssets" = $PackageVersion
     }
     "RunicAssets.AspNetCore" = @{

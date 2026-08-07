@@ -15,7 +15,7 @@ identity.
 | Project | Purpose |
 | --- | --- |
 | `RunicAssets` | Transport-neutral contracts, sources, validation, media types, and portable archives |
-| `RunicAssets.CsWebUi` | Assets-owned adapter to CsWebUi's in-memory VFS |
+| `RunicAssets.CsWebUi` | Assets-owned direct HTTP response adapter over CsWebUi's custom file handler |
 | `RunicAssets.AspNetCore` | Exact ASP.NET Core endpoints with cache and entity-tag metadata |
 | `integrations/RunicAssets.RunicToolkit` | Published Toolkit frontend-asset integration owned by Runic Assets |
 

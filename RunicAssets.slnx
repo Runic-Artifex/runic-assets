@@ -8,6 +8,7 @@
     <Project Path="integrations/RunicAssets.RunicToolkit/RunicAssets.RunicToolkit.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/RunicAssets.CsWebUiAotSmoke/RunicAssets.CsWebUiAotSmoke.csproj" />
     <Project Path="tests/RunicAssets.Tests/RunicAssets.Tests.csproj" />
   </Folder>
 </Solution>
