@@ -15,7 +15,7 @@ The package targets **.NET 10** and is currently in preview. It brings
 `RunicAssets` and the exact compatible
 `RunicToolkit.Hosting.Abstractions` contract transitively. Choose this package
 only when your Runic Toolkit host consumes `IFrontendAssetProvider`; use a
-different Runic Assets adapter for direct ASP.NET Core or CsWebUi delivery.
+different Runic Assets adapter for direct ASP.NET Core or CS-WebUI delivery.
 
 ## Create a Toolkit frontend provider
 
